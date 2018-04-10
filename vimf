@@ -1,0 +1,8 @@
+#!/bin/sh
+# This script requires the fzf fuzzy finder.
+# https://github.com/junegunn/fzf#using-the-finder
+f=$(fzf)
+if [ ! -z "$f" ];
+then
+	vim $f
+fi

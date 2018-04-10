@@ -1,0 +1,6 @@
+#!/bin/sh
+f=$(fzf)
+if [ ! -z "$f" ];
+then
+	cat $f
+fi

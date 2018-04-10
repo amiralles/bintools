@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# Removes all .orig files from the current tree 
+# and its children. (recursively.)
+COUNT=$(find . -type f -name "*.orig" -exec echo {} \; | wc -l)
+if [ $COUNT -eq 0 ];
+	then
+		echo "There are no .orig files to delete."
+		exit 0
+fi
+
+read -p "Are you shure you want to delete $COUNT .orig files? (y/n) " CHOISE
+case "$CHOISE" in 
+  y|Y|yes ) find . -type f -name "*.orig" -exec rm -rf {} \; ;;
+  n|N|no ) exit 0;;
+  * ) echo "Invalid answer. Expected yes or no.";;
+esac

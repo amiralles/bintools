@@ -1,0 +1,25 @@
+#!/bin/bash
+if [ "$1" == "" ]; then
+	echo "gg expected a extension."
+	echo "i.e. gg cs foo"
+	echo "--------^"
+	exit 1
+fi
+
+if [ "$2" == "" ]; then
+	echo "gg expected a name/term."
+	echo "i.e. gg cs foo"
+	echo "-----------^"
+	exit 1
+fi
+
+ext="$1"
+pattern="$2"
+
+if [[ "$ext" != *"\*"* ]]; then
+	ext=\*.$1
+fi
+
+# DEBUG.
+git grep $pattern -- "$ext"
+

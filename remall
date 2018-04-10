@@ -1,0 +1,21 @@
+#!/bin/bash
+# Removes all ocurrences of name (recursively).
+
+if [ "$1" == "" ]; then
+	echo "remall expected a name."
+	exit 1
+fi
+
+COUNT=$(find . -type f -name "$1" -exec echo {} \; | wc -l)
+if [ $COUNT -eq 0 ];
+	then
+		echo "There are no $1 files/directories to delete."
+		exit 0
+fi
+
+read -p "Are you shure you want to delete $COUNT files? (y/n) " CHOISE
+case "$CHOISE" in 
+  y|Y|yes ) find . -type f -name "$1" -exec rm -rf {} \; ;;
+  n|N|no ) exit 0;;
+  * ) echo "Invalid answer. Expected yes or no.";;
+esac

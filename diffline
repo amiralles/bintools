@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# git diff by line number.
+# This commands shows diff on a single line basis.
+# This command will help you when plug it to your editor  to see how a 
+# particular line of code look before the last change.
+function print_help {
+	echo ""
+	echo "Usage:"
+	echo "diff_line <filename> <linenum> [ctxlines]"
+	echo ""
+	echo "diff_line foo.txt 123"
+	echo "diff_line foo.txt 123 5"
+}
+
+# Colorizes additions/deletions from diff output.
+function colorize {
+	# TODO: Test on linux. On bash for mac the \e escape code
+	#       is broken. See if \033 yours on linux.
+	while read line
+	do
+		if [[ $line == \+* ]]; then
+			echo -e "\033[1;32m $line \033[0m"
+		elif [[ $line == \-* ]]; then
+			echo -e "\033[1;31m $line \033[0m"
+		else
+			echo "$line"
+		fi
+	done
+
+	echo -en "\033[0m"
+}
+
+# Required args.
+if [ "$1" == "" ]; then
+	echo "ERR. File name expected."
+	print_help
+	exit 1
+fi
+
+if [ "$2" == "" ]; then
+	echo "ERR. Line number expected."
+	print_help
+	exit 1
+fi
+
+file="$1"
+line="$2"
+ctx=2
+
+if [ "$3" != "" ]; then
+	# Since this is all about a single line diff, I think 3 lines of
+	# context is all you need (by default).
+	ctx="$3"
+fi
+
+echo $1
+echo $2
+
+git diff -U0 -- "$file"  | \
+grep -A"$ctx" "+""$line" | \
+colorize
+
