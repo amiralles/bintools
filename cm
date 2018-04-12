@@ -1,0 +1,38 @@
+#!/bin/bash
+# git commit helper
+files=$(exec git status --porcelain)
+if [[ -z $files ]]; then
+	echo "Nothing to commit. Bye!"
+	exit 1
+fi
+
+echo "Files/Dirs to be commited:"
+for f in $files; do
+	echo $f
+done
+
+while true; do
+	read -p "Add All? [Y-n]: " cont
+	[[ -z $cont ]] && cont='Y'
+	case $cont in
+		[Yy])
+			exec $(git add .)
+			break;;
+		[Nn])
+			exit 1
+			;;
+		*)
+			echo "Invalid option. Please chose 'Y/n'."
+			;;
+	esac
+done
+
+while true; do
+read -p "Enter commit msg: " msg
+	if [[ $msg ]]; then
+		exec git commit -m "$msg"
+		break
+	else
+		echo "A commit message is required to continue."
+	fi
+done
