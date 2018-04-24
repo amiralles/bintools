@@ -1,0 +1,12 @@
+#!/bin/bash
+if [[ -f $1 ]]; then
+	ls -l $1 | awk '{ sum += $5 } END { print sum }'
+elif [[ -d $1 ]]; then
+	echo "This may take a while to complete..."
+	find $1 -type f -exec ls -l {} \; | \
+		awk '{ sum += $5 } END { printf("%'"'"'d KB.\n", sum / 1024); }'
+else
+	echo "You must specify a path to a file or dir."
+	echo "i.e sizeof foo.txt"
+	exit 1
+fi
